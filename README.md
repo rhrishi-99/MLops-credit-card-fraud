@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue) ![MLflow](https://img.shields.io/badge/MLflow-2.10-orange) ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-green) ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-A production-grade MLOps pipeline for credit card fraud detection, built as part of a 6-week roadmap targeting ML Platform engineering roles at top-tier companies.
+MLOps pipeline for credit card fraud detection.
 
 ---
 
@@ -38,7 +38,6 @@ MLops-credit-card-fraud/
 ### Prerequisites
 - Python 3.10+
 - pip
-- Kaggle account (for dataset download)
 
 ### Installation
 
