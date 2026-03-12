@@ -39,7 +39,7 @@ MLops-credit-card-fraud/
 
 ## Setup
 
-### 🔹 Prerequisites
+### Prerequisites
 
 - Python 3.8+
 - pip
