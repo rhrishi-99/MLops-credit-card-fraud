@@ -1,59 +1,198 @@
-# MLOps — Credit Card Fraud Detection
+# 🚀 MLops — Credit Card Fraud Detection
 
-End-to-end MLOps pipeline built for Google/Apple ML Platform roles.
-Covers data ingestion, experiment tracking, model registry, and automated promotion.
+A Machine Learning Operations (MLOps) project for detecting fraudulent credit card transactions using a reproducible pipeline with **MLflow** for experiment tracking and model management.
 
-## Project Structure
+---
+
+## 📌 Overview
+
+This project builds an end-to-end ML pipeline to:
+
+- Preprocess transaction data  
+- Train fraud detection models  
+- Track experiments with MLflow  
+- Manage model versions  
+- Enable reproducible training  
+
+The dataset is highly imbalanced, making fraud detection a realistic real-world ML challenge.
+
+---
+
+## 🗂️ Project Structure
+
 ```
-fraud-mlops/
-├── main.py
-├── src/
-│   ├── pipeline/
-│   │   ├── preprocess.py     # data loading, chronological split, feature scaling
-│   │   └── train.py          # XGBoost training + MLflow logging
-│   └── registry/
-│       └── promote.py        # champion/challenger promotion logic
-└── data/                     # gitignored — see Dataset section
+MLops-credit-card-fraud/
+├── main.py                     # Main entry point
+├── journal.md                  # Development notes
+├── requirements.txt
+├── data/                       # Dataset (not included in repo)
+├── mlruns/                     # MLflow tracking artifacts
+└── src/
+    ├── pipeline/
+    │   ├── preprocess.py       # Data preprocessing
+    │   └── train.py            # Model training
+    └── registry/
+        └── promote.py          # Model promotion utilities
 ```
 
-## Setup
+---
+
+## ⚙️ Setup
+
+### 🔹 Prerequisites
+
+- Python 3.8+
+- pip
+- Kaggle account (for dataset download)
+
+---
+
+### 🔹 Installation
+
+Clone the repository:
+
 ```bash
-pip install mlflow xgboost scikit-learn pandas numpy evidently langgraph fastapi uvicorn
+git clone https://github.com/rhrishi-99/MLops-credit-card-fraud.git
+cd MLops-credit-card-fraud
 ```
 
-## Dataset
+Install dependencies:
 
-Download from Kaggle and place in `data/`:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📊 Dataset
+
+This project uses the **Credit Card Fraud Detection Dataset** from Kaggle.
+
+👉 Download:
+
 ```bash
 kaggle datasets download -d mlg-ulb/creditcardfraud
-unzip creditcard.zip -d data/
 ```
 
-## Run
+Extract the contents into:
+
+```
+data/creditcard.csv
+```
+
+⚠️ The dataset is not included due to GitHub file size limits.
+
+---
+
+## ▶️ Usage
+
+### 🔹 Run the Training Pipeline
+
 ```bash
 python main.py
-mlflow ui   # http://localhost:5000
 ```
 
-## How It Works
+---
 
-1. Data is split **chronologically** — first 80% trains, last 20% simulates production
-2. XGBoost trains with `scale_pos_weight=577` to handle the 577:1 class imbalance
-3. Every run logs params, metrics, and model binary to MLflow automatically
-4. New models register as `@challenger` — only promoted to `@champion` if F1 beats the current production model
+### 🔹 Launch MLflow UI
 
-## Results (Week 1)
+```bash
+mlflow ui
+```
 
-| Metric | Value |
-|--------|-------|
-| F1 Score | 0.8553 |
-| ROC-AUC | 0.9760 |
+Open in browser:
 
-## Roadmap
+```
+http://localhost:5000
+```
 
-- [x] Week 1 — Data pipeline + MLflow tracking + model registry
-- [ ] Week 2 — Airflow DAG orchestration
-- [ ] Week 3 — FastAPI + Docker + GCP Cloud Run
-- [ ] Week 4 — Evidently drift detection
-- [ ] Week 5 — LangGraph monitoring agent
-- [ ] Week 6 — Human-in-the-loop + Slack approvals
+You can view:
+
+- Experiments  
+- Metrics  
+- Parameters  
+- Artifacts  
+- Model versions  
+
+---
+
+## 🧠 Project Components
+
+### 🔸 Preprocessing  
+`src/pipeline/preprocess.py`
+
+- Data cleaning  
+- Feature scaling  
+- Handling class imbalance  
+- Train/test split  
+
+---
+
+### 🔸 Training  
+`src/pipeline/train.py`
+
+- Model training  
+- Hyperparameter tuning  
+- Evaluation metrics  
+- MLflow logging  
+
+---
+
+### 🔸 Model Registry  
+`src/registry/promote.py`
+
+- Model versioning  
+- Promotion to production stages  
+- Artifact management  
+
+---
+
+## 📁 MLflow Tracking
+
+All experiment data is stored in:
+
+```
+mlruns/
+```
+
+This includes:
+
+- Model artifacts  
+- Metrics  
+- Parameters  
+- Run metadata  
+
+---
+
+## 📝 Development Notes
+
+See:
+
+```
+journal.md
+```
+
+for implementation details and project progress.
+
+---
+
+## 🚧 Future Improvements
+
+- Add model deployment pipeline  
+- Integrate DVC for dataset versioning  
+- Add CI/CD workflow  
+- Real-time fraud detection API  
+
+---
+
+## 📜 License
+
+Add your preferred license here (e.g., MIT License).
+
+---
+
+## ⭐ Acknowledgements
+
+- ULB Machine Learning Group (dataset creators)  
+- MLflow documentation  
+- Kaggle community  
