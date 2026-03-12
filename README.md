@@ -1,85 +1,59 @@
-# MLops - Credit Card Fraud Detection
+# MLOps — Credit Card Fraud Detection
 
-A machine learning operations project for credit card fraud detection using MLflow for experiment tracking and model management.
+End-to-end MLOps pipeline built for Google/Apple ML Platform roles.
+Covers data ingestion, experiment tracking, model registry, and automated promotion.
 
 ## Project Structure
-
 ```
-codecode/
-├── main.py                 # Main entry point
-├── journal.md              # Project journal/notes
-├── data/
-│   └── creditcard.csv      # Credit card transaction dataset
-├── mlruns/                 # MLflow experiment runs and artifacts
-└── src/
-    ├── pipeline/
-    │   ├── preprocess.py   # Data preprocessing pipeline
-    │   └── train.py        # Model training logic
-    └── registry/
-        └── promote.py      # Model promotion utilities
+fraud-mlops/
+├── main.py
+├── src/
+│   ├── pipeline/
+│   │   ├── preprocess.py     # data loading, chronological split, feature scaling
+│   │   └── train.py          # XGBoost training + MLflow logging
+│   └── registry/
+│       └── promote.py        # champion/challenger promotion logic
+└── data/                     # gitignored — see Dataset section
 ```
 
 ## Setup
-
-### Prerequisites
-- Python 3.8+
-- pip
-
-### Installation
-
-1. Clone the repository:
 ```bash
-cd c:\Users\Rhrishi\Sem6\MLops
+pip install mlflow xgboost scikit-learn pandas numpy evidently langgraph fastapi uvicorn
 ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## Dataset
 
-### Dataset
-
-The project uses the Credit Card Fraud Detection dataset. Download it using:
+Download from Kaggle and place in `data/`:
 ```bash
 kaggle datasets download -d mlg-ulb/creditcardfraud
+unzip creditcard.zip -d data/
 ```
 
-Extract the dataset to the `data/` folder.
-
-## Usage
-
-### Run the Pipeline
-
-Execute the main training pipeline:
+## Run
 ```bash
-python codecode/main.py
+python main.py
+mlflow ui   # http://localhost:5000
 ```
 
-### Project Components
+## How It Works
 
-- **Preprocessing** (`src/pipeline/preprocess.py`): Handles data cleaning, normalization, and feature engineering
-- **Training** (`src/pipeline/train.py`): Trains machine learning models with hyperparameter tuning
-- **Registry** (`src/registry/promote.py`): Manages model promotion and versioning
+1. Data is split **chronologically** — first 80% trains, last 20% simulates production
+2. XGBoost trains with `scale_pos_weight=577` to handle the 577:1 class imbalance
+3. Every run logs params, metrics, and model binary to MLflow automatically
+4. New models register as `@challenger` — only promoted to `@champion` if F1 beats the current production model
 
-## MLflow Integration
+## Results (Week 1)
 
-Model experiments are tracked using MLflow. View experiments and runs:
-```bash
-mlflow ui
-```
+| Metric | Value |
+|--------|-------|
+| F1 Score | 0.8553 |
+| ROC-AUC | 0.9760 |
 
-This will start the MLflow UI on `http://localhost:5000`
+## Roadmap
 
-## Directory Details
-
-- `mlruns/`: Contains MLflow run artifacts, models, and metadata
-- `data/`: Stores dataset files
-- `src/`: Source code for pipeline and model management
-
-## Notes
-
-See `journal.md` for project progress and development notes.
-
-## License
-
-[Add license information]
+- [x] Week 1 — Data pipeline + MLflow tracking + model registry
+- [ ] Week 2 — Airflow DAG orchestration
+- [ ] Week 3 — FastAPI + Docker + GCP Cloud Run
+- [ ] Week 4 — Evidently drift detection
+- [ ] Week 5 — LangGraph monitoring agent
+- [ ] Week 6 — Human-in-the-loop + Slack approvals
