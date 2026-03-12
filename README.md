@@ -1,10 +1,10 @@
-# 🚀 MLops — Credit Card Fraud Detection
+# MLops — Credit Card Fraud Detection
 
 A Machine Learning Operations (MLOps) project for detecting fraudulent credit card transactions using a reproducible pipeline with **MLflow** for experiment tracking and model management.
 
 ---
 
-## 📌 Overview
+## Overview
 
 This project builds an end-to-end ML pipeline to:
 
@@ -18,7 +18,7 @@ The dataset is highly imbalanced, making fraud detection a realistic real-world 
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 MLops-credit-card-fraud/
@@ -37,7 +37,7 @@ MLops-credit-card-fraud/
 
 ---
 
-## ⚙️ Setup
+## Setup
 
 ### 🔹 Prerequisites
 
@@ -47,7 +47,7 @@ MLops-credit-card-fraud/
 
 ---
 
-### 🔹 Installation
+### Installation
 
 Clone the repository:
 
@@ -64,11 +64,11 @@ pip install -r requirements.txt
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 This project uses the **Credit Card Fraud Detection Dataset** from Kaggle.
 
-👉 Download:
+Download:
 
 ```bash
 kaggle datasets download -d mlg-ulb/creditcardfraud
@@ -80,7 +80,7 @@ Extract the contents into:
 data/creditcard.csv
 ```
 
-⚠️ The dataset is not included due to GitHub file size limits.
+The dataset is not included due to GitHub file size limits.
 
 ---
 
@@ -116,9 +116,9 @@ You can view:
 
 ---
 
-## 🧠 Project Components
+## Project Components
 
-### 🔸 Preprocessing  
+### Preprocessing  
 `src/pipeline/preprocess.py`
 
 - Data cleaning  
@@ -128,7 +128,7 @@ You can view:
 
 ---
 
-### 🔸 Training  
+### Training  
 `src/pipeline/train.py`
 
 - Model training  
@@ -138,7 +138,7 @@ You can view:
 
 ---
 
-### 🔸 Model Registry  
+### Model Registry  
 `src/registry/promote.py`
 
 - Model versioning  
@@ -147,7 +147,7 @@ You can view:
 
 ---
 
-## 📁 MLflow Tracking
+## MLflow Tracking
 
 All experiment data is stored in:
 
@@ -164,7 +164,7 @@ This includes:
 
 ---
 
-## 📝 Development Notes
+## Development Notes
 
 See:
 
@@ -176,7 +176,7 @@ for implementation details and project progress.
 
 ---
 
-## 🚧 Future Improvements
+## Future Improvements
 
 - Add model deployment pipeline  
 - Integrate DVC for dataset versioning  
@@ -185,13 +185,8 @@ for implementation details and project progress.
 
 ---
 
-## 📜 License
 
-Add your preferred license here (e.g., MIT License).
-
----
-
-## ⭐ Acknowledgements
+## Acknowledgements
 
 - ULB Machine Learning Group (dataset creators)  
 - MLflow documentation  
