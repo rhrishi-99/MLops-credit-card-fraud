@@ -1,6 +1,6 @@
 # MLOps — Credit Card Fraud Detection
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue) ![MLflow](https://img.shields.io/badge/MLflow-2.10-orange) ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-green) ![License](https://img.shields.io/badge/License-MIT-lightgrey)
+![Python](https://img.shields.io/badge/Python-3.10+-blue) ![MLflow](https://img.shields.io/badge/MLflow-2.10-orange) ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-green) ![Airflow](https://img.shields.io/badge/Airflow-2.9-red) ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 MLOps pipeline for credit card fraud detection.
 
@@ -21,6 +21,10 @@ MLops-credit-card-fraud/
 ├── main.py                     # Main entry point
 ├── journal.md                  # Development notes
 ├── requirements.txt
+├── Dockerfile.airflow           # Custom Airflow image with ML dependencies
+├── docker-compose.yaml          # Airflow orchestration stack
+├── dags/
+│   └── fraud_training_dag.py   # Airflow DAG — automated training pipeline
 ├── data/                       # Dataset (not included in repo)
 ├── mlruns/                     # MLflow tracking artifacts
 └── src/
@@ -37,6 +41,7 @@ MLops-credit-card-fraud/
 
 ### Prerequisites
 - Python 3.10+
+- Docker Desktop
 - pip
 
 ### Installation
@@ -64,7 +69,7 @@ unzip creditcard.zip -d data/
 
 ## Usage
 
-### Run the pipeline
+### Run the pipeline manually
 
 ```bash
 python main.py
@@ -77,6 +82,14 @@ mlflow ui
 ```
 
 Navigate to `http://localhost:5000` to view experiments, metrics, parameters, and registered model versions.
+
+### Run Airflow (automated pipeline)
+
+```bash
+docker-compose up -d
+```
+
+Navigate to `http://localhost:8080` (login: `airflow / airflow`), search for `fraud_detection_training`, enable and trigger the DAG.
 
 ---
 
@@ -91,6 +104,21 @@ XGBoost with `scale_pos_weight=577` to handle class imbalance. Every run logs hy
 ### Model Registry — `src/registry/promote.py`
 New models register as `@challenger`. Promotion to `@champion` (production) only occurs if the new model's F1 strictly exceeds the current champion's — preventing accidental regression in production.
 
+### Airflow DAG — `dags/fraud_training_dag.py`
+Five tasks run in sequence on a weekly schedule:
+
+```
+ingest_data → validate_data → train_model → evaluate_model → register_if_better
+```
+
+- `ingest_data` — loads and preprocesses data
+- `validate_data` — fails early if row count is insufficient
+- `train_model` — trains XGBoost, logs to MLflow
+- `evaluate_model` — fails if F1 < 0.70
+- `register_if_better` — promotes to @champion only if F1 improves
+
+---
+
 ## Results (Week 1 Baseline)
 
 | Metric | Value |
@@ -102,12 +130,11 @@ New models register as `@challenger`. Promotion to `@champion` (production) only
 
 ---
 
-
 ## Roadmap
 
 - [x] Week 1 — Data pipeline, MLflow experiment tracking, champion/challenger model registry
-- [ ] Week 2 — Apache Airflow DAG: `ingest → validate → train → evaluate → register_if_better`
-- [ ] Week 3 — FastAPI serving, Dockerization, GCP Cloud Run deployment
+- [x] Week 2 — Apache Airflow DAG: `ingest → validate → train → evaluate → register_if_better`
+- [ ] Week 3 — FastAPI serving + Docker containerization
 - [ ] Week 4 — Evidently drift detection against training baseline
 - [ ] Week 5 — LangGraph autonomous monitoring agent (ReAct pattern)
 - [ ] Week 6 — Human-in-the-loop Slack approval workflow + audit trail
